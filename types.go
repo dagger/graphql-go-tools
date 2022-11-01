@@ -399,7 +399,8 @@ func (c *registry) buildFieldFromAST(definition *ast.FieldDefinition, kind, type
 			if err != nil {
 				return nil, err
 			}
-			field.Args[arg.Name.Value] = argValue
+			argValue.Name = arg.Name.Value
+			field.Args = append(field.Args, argValue)
 		}
 	}
 
@@ -434,7 +435,7 @@ func (c *registry) buildUnionFromAST(definition *ast.UnionDefinition) error {
 		if object != nil {
 			switch o := object.(type) {
 			case *graphql.Object:
-				unionConfig.Types = append(unionConfig.Types, o)
+				unionConfig.Types = append(unionConfig.Types.([]*graphql.Object), o)
 				continue
 			}
 		}
