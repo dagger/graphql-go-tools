@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bhoriuchi/graphql-go-tools/server/logger"
+	"github.com/dagger/graphql-go-tools/server/logger"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )

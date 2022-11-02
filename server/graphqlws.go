@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/bhoriuchi/graphql-go-tools/server/graphqlws"
 	"github.com/dagger/graphql"
+	"github.com/dagger/graphql-go-tools/server/graphqlws"
 	"github.com/gorilla/websocket"
 )
 

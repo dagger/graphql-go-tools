@@ -1,4 +1,4 @@
-module github.com/bhoriuchi/graphql-go-tools
+module github.com/dagger/graphql-go-tools
 
 go 1.13
 
