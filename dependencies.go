@@ -3,8 +3,8 @@ package tools
 import (
 	"fmt"
 
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/kinds"
+	"github.com/dagger/graphql/language/ast"
+	"github.com/dagger/graphql/language/kinds"
 )
 
 type DependencyMap map[string]map[string]interface{}

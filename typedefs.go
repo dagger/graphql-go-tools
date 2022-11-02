@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/parser"
-	"github.com/graphql-go/graphql/language/printer"
-	"github.com/graphql-go/graphql/language/source"
+	"github.com/dagger/graphql/language/ast"
+	"github.com/dagger/graphql/language/parser"
+	"github.com/dagger/graphql/language/printer"
+	"github.com/dagger/graphql/language/source"
 )
 
 // ConcatenateTypeDefs combines one ore more typeDefs into an ast Document

@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/graphql-go/graphql"
+	"github.com/dagger/graphql"
 )
 
 type ChanMgr struct {

@@ -1,9 +1,9 @@
 package scalars
 
 import (
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/kinds"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
+	"github.com/dagger/graphql/language/kinds"
 )
 
 // ScalarJSON a scalar JSON type

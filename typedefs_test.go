@@ -3,7 +3,7 @@ package tools
 import (
 	"testing"
 
-	"github.com/graphql-go/graphql"
+	"github.com/dagger/graphql"
 )
 
 func TestConcatenateTypeDefs(t *testing.T) {

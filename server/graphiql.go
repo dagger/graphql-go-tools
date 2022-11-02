@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/graphql-go/graphql"
+	"github.com/dagger/graphql"
 )
 
 // GraphiqlVersion is the current version of GraphiQL

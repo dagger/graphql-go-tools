@@ -1,6 +1,6 @@
+github.com/dagger/graphql v0.0.0-20221102000338-24d5e47d3b72 h1:0I9Y9nsFVcP42k9eOpjYmcm+NMEIFxNuJFOHfQ8MKpo=
+github.com/dagger/graphql v0.0.0-20221102000338-24d5e47d3b72/go.mod h1:z9nYmunTkok2pE+Kdjpl1ICaqcCzlDxcVjwaFE0MJTc=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
-github.com/graphql-go/graphql v0.8.0 h1:JHRQMeQjofwqVvGwYnr8JnPTY0AxgVy1HpHSGPLdH0I=
-github.com/graphql-go/graphql v0.8.0/go.mod h1:nKiHzRM0qopJEwCITUuIsxk9PlVlwIiiI8pnJEhordQ=

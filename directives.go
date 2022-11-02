@@ -3,8 +3,8 @@ package tools
 import (
 	"context"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
 )
 
 const (

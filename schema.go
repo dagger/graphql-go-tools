@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
 )
 
 // default root type names

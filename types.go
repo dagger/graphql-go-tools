@@ -3,9 +3,9 @@ package tools
 import (
 	"fmt"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/kinds"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
+	"github.com/dagger/graphql/language/kinds"
 )
 
 // builds a scalar from ast

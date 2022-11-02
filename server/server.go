@@ -7,9 +7,9 @@ import (
 
 	"github.com/bhoriuchi/graphql-go-tools/server/graphqlws"
 	"github.com/bhoriuchi/graphql-go-tools/server/logger"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/gqlerrors"
 	"github.com/gorilla/websocket"
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/gqlerrors"
 )
 
 // Constants
