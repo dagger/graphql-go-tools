@@ -1,8 +1,8 @@
 package tools
 
 import (
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/kinds"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/kinds"
 )
 
 // Resolver interface to a resolver configuration

@@ -3,8 +3,8 @@ package scalars
 import (
 	"fmt"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
 )
 
 // ScalarBoolString converts boolean to a string

@@ -3,8 +3,8 @@ package tools
 import (
 	"context"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
 )
 
 const (
@@ -154,7 +154,8 @@ func (c *registry) buildDirectiveFromAST(definition *ast.DirectiveDefinition) er
 
 	for _, arg := range definition.Arguments {
 		if argValue, err := c.buildArgFromAST(arg); err == nil {
-			directiveConfig.Args[arg.Name.Value] = argValue
+			argValue.Name = arg.Name.Value
+			directiveConfig.Args = append(directiveConfig.Args, argValue)
 		} else {
 			return err
 		}

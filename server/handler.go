@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/gqlerrors"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/gqlerrors"
 )
 
 // RequestOptions options

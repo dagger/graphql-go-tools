@@ -1,6 +1,6 @@
 package tools
 
-// taken from https://github.com/graphql-go/graphql/values.go
+// taken from https://github.com/dagger/graphql/values.go
 // since none of these functions are exported
 
 import (
@@ -8,9 +8,9 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/language/ast"
-	"github.com/graphql-go/graphql/language/kinds"
+	"github.com/dagger/graphql"
+	"github.com/dagger/graphql/language/ast"
+	"github.com/dagger/graphql/language/kinds"
 )
 
 // Prepares an object map of argument values given a list of argument

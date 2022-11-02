@@ -3,7 +3,7 @@ package graphqlws
 import (
 	"sync"
 
-	"github.com/graphql-go/graphql"
+	"github.com/dagger/graphql"
 )
 
 type ChanMgr struct {

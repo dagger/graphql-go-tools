@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"path"
 
-	"github.com/graphql-go/graphql"
+	"github.com/dagger/graphql"
 )
 
 // GraphiQLConfig a configuration for graphiql

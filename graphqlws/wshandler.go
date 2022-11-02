@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/dagger/graphql"
 	"github.com/gorilla/websocket"
-	"github.com/graphql-go/graphql"
 )
 
 // ConnKey the connection key
