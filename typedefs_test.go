@@ -16,7 +16,7 @@ func TestConcatenateTypeDefs(t *testing.T) {
 				name: String!
 				description: String
 			}
-			
+
 			extend type Query {
 				foo: Foo
 			}`,
@@ -24,12 +24,12 @@ func TestConcatenateTypeDefs(t *testing.T) {
 			interface Named {
 				name: String!
 			}
-			
+
 			type Bar implements Named {
 				name: String!
 				description: String
 			}
-			
+
 			extend type Query {
 				bar: Bar
 			}`,
@@ -74,7 +74,7 @@ func TestObjectIsTypeOf(t *testing.T) {
 				description: String
 			}
 			union Foo = A | B
-			
+
 			extend type Query {
 				foo: Foo
 			}`,
@@ -133,7 +133,7 @@ func TestUnionResolveType(t *testing.T) {
 				description: String
 			}
 			union Foo = A | B
-			
+
 			extend type Query {
 				foo: Foo
 			}`,

@@ -2,35 +2,31 @@ package tools
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/dagger/graphql/language/ast"
 	"github.com/dagger/graphql/language/parser"
-	"github.com/dagger/graphql/language/printer"
 	"github.com/dagger/graphql/language/source"
 )
 
 // ConcatenateTypeDefs combines one ore more typeDefs into an ast Document
 func (c *ExecutableSchema) ConcatenateTypeDefs() (*ast.Document, error) {
-	switch c.TypeDefs.(type) {
+	switch defs := c.TypeDefs.(type) {
 	case string:
-		return c.concatenateTypeDefs([]string{c.TypeDefs.(string)})
+		return c.concatenateTypeDefs([]string{defs})
 	case []string:
-		return c.concatenateTypeDefs(c.TypeDefs.([]string))
+		return c.concatenateTypeDefs(defs)
 	case func() []string:
-		return c.concatenateTypeDefs(c.TypeDefs.(func() []string)())
+		return c.concatenateTypeDefs(defs())
 	}
 	return nil, fmt.Errorf("unsupported TypeDefs value. Must be one of string, []string, or func() []string")
 }
 
-// performs the actual concatenation of the types by parsing each
-// typeDefs string and converting each definition into a string
-// then creating a unique list of all definitions and finally
-// printing them as a single definition and returning the parsed document
+// appends all type definitions together into one document
 func (c *ExecutableSchema) concatenateTypeDefs(typeDefs []string) (*ast.Document, error) {
-	resolvedTypes := map[string]interface{}{}
+	doc := ast.NewDocument(nil)
+
 	for _, defs := range typeDefs {
-		doc, err := parser.Parse(parser.ParseParams{
+		sub, err := parser.Parse(parser.ParseParams{
 			Source: &source.Source{
 				Body: []byte(defs),
 				Name: "GraphQL",
@@ -40,23 +36,8 @@ func (c *ExecutableSchema) concatenateTypeDefs(typeDefs []string) (*ast.Document
 			return nil, err
 		}
 
-		for _, typeDef := range doc.Definitions {
-			if def := printer.Print(typeDef); def != nil {
-				stringDef := strings.TrimSpace(def.(string))
-				resolvedTypes[stringDef] = nil
-			}
-		}
+		doc.Definitions = append(doc.Definitions, sub.Definitions...)
 	}
 
-	typeArray := []string{}
-	for def := range resolvedTypes {
-		typeArray = append(typeArray, def)
-	}
-
-	return parser.Parse(parser.ParseParams{
-		Source: &source.Source{
-			Body: []byte(strings.Join(typeArray, "\n")),
-			Name: "GraphQL",
-		},
-	})
+	return doc, nil
 }
