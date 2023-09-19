@@ -2,7 +2,7 @@ package tools
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -108,15 +108,15 @@ func parseDefaultValue(inputType ast.Type, value any) (any, error) {
 	case *ast.Named:
 		switch t.Name.Value {
 		case "Int":
-			value = graphql.Int.ParseValue(value)
+			return graphql.Int.ParseValue(value)
 		case "Float":
-			value = graphql.Float.ParseValue(value)
+			return graphql.Float.ParseValue(value)
 		case "Boolean":
-			value = graphql.Boolean.ParseValue(value)
+			return graphql.Boolean.ParseValue(value)
 		case "ID":
-			value = graphql.ID.ParseValue(value)
+			return graphql.ID.ParseValue(value)
 		case "String":
-			value = graphql.String.ParseValue(value)
+			return graphql.String.ParseValue(value)
 		}
 	}
 
@@ -145,14 +145,14 @@ func ReadSourceFiles(p string, recursive ...bool) (string, error) {
 		return "", err
 	}
 
-	var readFunc = func(p string, info os.FileInfo, err error) error {
+	var readFunc = func(p string, info fs.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
 
 		switch ext := strings.ToLower(filepath.Ext(info.Name())); ext {
 		case ".gql", ".graphql":
-			data, err := ioutil.ReadFile(p)
+			data, err := os.ReadFile(p)
 			if err != nil {
 				return err
 			}
@@ -168,12 +168,16 @@ func ReadSourceFiles(p string, recursive ...bool) (string, error) {
 			return "", err
 		}
 	} else {
-		files, err := ioutil.ReadDir(abs)
+		files, err := os.ReadDir(abs)
 		if err != nil {
 			return "", err
 		}
 		for _, file := range files {
-			if err := readFunc(abs, file, nil); err != nil {
+			info, err := file.Info()
+			if err != nil {
+				return "", err
+			}
+			if err := readFunc(abs, info, nil); err != nil {
 				return "", err
 			}
 		}

@@ -2,6 +2,7 @@ package scalars
 
 import (
 	"encoding/json"
+	"fmt"
 	"regexp"
 
 	"github.com/dagger/graphql"
@@ -34,27 +35,27 @@ func replacePrefixedKeys(obj any, prefixRx *regexp.Regexp, replacement string) a
 	}
 }
 
-func serializeQueryDocFn(value any) any {
-	return replacePrefixedKeys(value, storedQueryDocOperatorRx, "$")
+func serializeQueryDocFn(value any) (any, error) {
+	return replacePrefixedKeys(value, storedQueryDocOperatorRx, "$"), nil
 }
 
-func parseValueQueryDocFn(value any) any {
-	return replacePrefixedKeys(value, queryDocOperatorRx, "_")
+func parseValueQueryDocFn(value any) (any, error) {
+	return replacePrefixedKeys(value, queryDocOperatorRx, "_"), nil
 }
 
-func parseLiteralQueryDocFn(astValue ast.Value) any {
+func parseLiteralQueryDocFn(astValue ast.Value) (any, error) {
 	var val any
 	switch astValue.GetKind() {
 	case kinds.StringValue:
 		bvalue := []byte(astValue.GetValue().(string))
 		if err := json.Unmarshal(bvalue, &val); err != nil {
-			return nil
+			return nil, err
 		}
-		return replacePrefixedKeys(val, queryDocOperatorRx, "_")
+		return replacePrefixedKeys(val, queryDocOperatorRx, "_"), nil
 	case kinds.ObjectValue:
 		return parseLiteralJSONFn(astValue)
 	}
-	return nil
+	return nil, fmt.Errorf("unknown kind %v", astValue.GetKind())
 }
 
 // ScalarQueryDocument a mongodb style query document

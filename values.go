@@ -10,7 +10,6 @@ import (
 
 	"github.com/dagger/graphql"
 	"github.com/dagger/graphql/language/ast"
-	"github.com/dagger/graphql/language/kinds"
 )
 
 // Prepares an object map of argument values given a list of argument
@@ -32,9 +31,8 @@ func GetArgumentValues(argDefs []*graphql.Argument, argASTs []*ast.Argument, var
 			valueAST = argAST.Value
 		}
 
-		value := valueFromAST(valueAST, argDef.Type, variableVariables)
-
-		if isNullish(value) {
+		value, err := valueFromAST(valueAST, argDef.Type, variableVariables)
+		if err != nil || isNullish(value) {
 			value = argDef.DefaultValue
 		}
 
@@ -90,95 +88,87 @@ func isNullish(src any) bool {
  * | Int / Float          | Number        |
  *
  */
-func valueFromAST(valueAST ast.Value, ttype graphql.Input, variables map[string]interface{}) interface{} {
-
-	if ttype, ok := ttype.(*graphql.NonNull); ok {
-		val := valueFromAST(valueAST, ttype.OfType, variables)
-		return val
-	}
-
+func valueFromAST(valueAST ast.Value, ttype graphql.Input, variables map[string]any) (any, error) {
 	if valueAST == nil {
-		return nil
+		return nil, nil
 	}
-
-	if valueAST, ok := valueAST.(*ast.Variable); ok && valueAST.Kind == kinds.Variable {
+	// precedence: value > type
+	if valueAST, ok := valueAST.(*ast.Variable); ok {
 		if valueAST.Name == nil {
-			return nil
+			return nil, fmt.Errorf("invalid variable")
 		}
-		if variables == nil {
-			return nil
+
+		var val any
+		var found bool
+		if variables != nil {
+			val, found = variables[valueAST.Name.Value]
 		}
-		variableName := valueAST.Name.Value
-		variableVal, ok := variables[variableName]
-		if !ok {
-			return nil
+		if !found {
+			return nil, fmt.Errorf("missing variable: $%s", valueAST.Name.Value)
 		}
 		// Note: we're not doing any checking that this variable is correct. We're
 		// assuming that this query has been validated and the variable usage here
 		// is of the correct type.
-		return variableVal
+		return val, nil
 	}
-
-	if ttype, ok := ttype.(*graphql.List); ok {
-		itemType := ttype.OfType
-		if valueAST, ok := valueAST.(*ast.ListValue); ok && valueAST.Kind == kinds.ListValue {
-			values := []interface{}{}
+	switch ttype := ttype.(type) {
+	case *graphql.NonNull:
+		return valueFromAST(valueAST, ttype.OfType, variables)
+	case *graphql.List:
+		values := []any{}
+		if valueAST, ok := valueAST.(*ast.ListValue); ok {
 			for _, itemAST := range valueAST.Values {
-				v := valueFromAST(itemAST, itemType, variables)
-				values = append(values, v)
+				recur, err := valueFromAST(itemAST, ttype.OfType, variables)
+				if err != nil {
+					return nil, err
+				}
+				values = append(values, recur)
 			}
-			return values
+			return values, nil
 		}
-		v := valueFromAST(valueAST, itemType, variables)
-		return []interface{}{v}
-	}
-
-	if ttype, ok := ttype.(*graphql.InputObject); ok {
-		valueAST, ok := valueAST.(*ast.ObjectValue)
-		if !ok {
-			return nil
+		recur, err := valueFromAST(valueAST, ttype.OfType, variables)
+		if err != nil {
+			return nil, err
+		}
+		return append(values, recur), nil
+	case *graphql.InputObject:
+		var (
+			ok bool
+			ov *ast.ObjectValue
+			of *ast.ObjectField
+		)
+		if ov, ok = valueAST.(*ast.ObjectValue); !ok {
+			return nil, fmt.Errorf("expected %T, found %T", ov, valueAST)
 		}
 		fieldASTs := map[string]*ast.ObjectField{}
-		for _, fieldAST := range valueAST.Fields {
-			if fieldAST.Name == nil {
+		for _, of = range ov.Fields {
+			if of == nil || of.Name == nil {
 				continue
 			}
-			fieldName := fieldAST.Name.Value
-			fieldASTs[fieldName] = fieldAST
-
+			fieldASTs[of.Name.Value] = of
 		}
-		obj := map[string]interface{}{}
-		for fieldName, field := range ttype.Fields() {
-			fieldAST, ok := fieldASTs[fieldName]
-			fieldValue := field.DefaultValue
-			if !ok || fieldAST == nil {
-				if fieldValue == nil {
-					continue
+		obj := map[string]any{}
+		for name, field := range ttype.Fields() {
+			var value any
+			if of, ok = fieldASTs[name]; ok {
+				recur, err := valueFromAST(of.Value, field.Type, variables)
+				if err != nil {
+					return nil, err
 				}
+				value = recur
 			} else {
-				fieldValue = valueFromAST(fieldAST.Value, field.Type, variables)
+				value = field.DefaultValue
 			}
-			if isNullish(fieldValue) {
-				fieldValue = field.DefaultValue
-			}
-			if !isNullish(fieldValue) {
-				obj[fieldName] = fieldValue
+			if !isNullish(value) {
+				obj[name] = value
 			}
 		}
-		return obj
+		return obj, nil
+	case *graphql.Scalar:
+		return ttype.ParseLiteral(valueAST)
+	case *graphql.Enum:
+		return ttype.ParseLiteral(valueAST)
 	}
 
-	switch ttype := ttype.(type) {
-	case *graphql.Scalar:
-		parsed := ttype.ParseLiteral(valueAST)
-		if !isNullish(parsed) {
-			return parsed
-		}
-	case *graphql.Enum:
-		parsed := ttype.ParseLiteral(valueAST)
-		if !isNullish(parsed) {
-			return parsed
-		}
-	}
-	return nil
+	return nil, fmt.Errorf("valueFromAST: unknown type %T", ttype)
 }
