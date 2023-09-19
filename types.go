@@ -67,7 +67,7 @@ func (c *registry) buildEnumFromAST(definition *ast.EnumDefinition) error {
 
 // builds an enum value from an ast
 func (c *registry) buildEnumValueFromAST(definition *ast.EnumValueDefinition, enumName string) (*graphql.EnumValueConfig, error) {
-	var value interface{}
+	var value any
 	value = definition.Name.Value
 
 	if r := c.getResolver(enumName); r != nil && r.getKind() == kinds.EnumDefinition {
@@ -94,7 +94,7 @@ func (c *registry) buildEnumValueFromAST(definition *ast.EnumValueDefinition, en
 
 // builds an input from ast
 func (c *registry) buildInputObjectFromAST(definition *ast.InputObjectDefinition) error {
-	var fields interface{}
+	var fields any
 	name := definition.Name.Value
 	inputConfig := graphql.InputObjectConfig{
 		Name:        name,

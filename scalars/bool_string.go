@@ -12,11 +12,11 @@ var ScalarBoolString = graphql.NewScalar(
 	graphql.ScalarConfig{
 		Name:        "BoolString",
 		Description: "BoolString converts a boolean to/from a string",
-		Serialize: func(value interface{}) interface{} {
+		Serialize: func(value any) any {
 			valStr := fmt.Sprintf("%v", value)
 			return valStr == "true" || valStr == "1"
 		},
-		ParseValue: func(value interface{}) interface{} {
+		ParseValue: func(value any) any {
 			b, ok := value.(bool)
 			if !ok {
 				return "false"
@@ -25,7 +25,7 @@ var ScalarBoolString = graphql.NewScalar(
 			}
 			return "false"
 		},
-		ParseLiteral: func(astValue ast.Value) interface{} {
+		ParseLiteral: func(astValue ast.Value) any {
 			value := astValue.GetValue()
 			b, ok := value.(bool)
 			if !ok {

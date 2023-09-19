@@ -32,7 +32,7 @@ type Query {
 	users: [User]
 }
 `
-	users := []map[string]interface{}{
+	users := []map[string]any{
 		{
 			"id":       "1",
 			"type":     "user",
@@ -49,10 +49,10 @@ type Query {
 
 	schema, err := MakeExecutableSchema(ExecutableSchema{
 		TypeDefs: typeDefs,
-		Resolvers: map[string]interface{}{
+		Resolvers: map[string]any{
 			"User": &InterfaceResolver{
 				ResolveType: func(p graphql.ResolveTypeParams) *graphql.Object {
-					value := p.Value.(map[string]interface{})
+					value := p.Value.(map[string]any)
 					typ := value["type"].(string)
 					if typ == "user" {
 						return p.Info.Schema.Type("UserAccount").(*graphql.Object)
@@ -66,7 +66,7 @@ type Query {
 			"Query": &ObjectResolver{
 				Fields: FieldResolveMap{
 					"users": &FieldResolve{
-						Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						Resolve: func(p graphql.ResolveParams) (any, error) {
 							return users, nil
 						},
 					},
@@ -123,10 +123,10 @@ type Query {
 }`
 
 	// create some data
-	foos := []map[string]interface{}{
+	foos := []map[string]any{
 		{
 			"name": "foo",
-			"meta": map[string]interface{}{
+			"meta": map[string]any{
 				"bar": "baz",
 			},
 		},
@@ -135,11 +135,11 @@ type Query {
 	// make the schema
 	_, err := MakeExecutableSchema(ExecutableSchema{
 		TypeDefs: typeDefs,
-		Resolvers: map[string]interface{}{
+		Resolvers: map[string]any{
 			"Query": &ObjectResolver{
 				Fields: FieldResolveMap{
 					"foos": &FieldResolve{
-						Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						Resolve: func(p graphql.ResolveParams) (any, error) {
 							return foos, nil
 						},
 					},
@@ -173,7 +173,7 @@ schema {
 `
 
 	// create some data
-	foos := []map[string]interface{}{
+	foos := []map[string]any{
 		{
 			"name":        "foo",
 			"description": "a foo",
@@ -183,11 +183,11 @@ schema {
 	// make the schema
 	schema, err := MakeExecutableSchema(ExecutableSchema{
 		TypeDefs: typeDefs,
-		Resolvers: map[string]interface{}{
+		Resolvers: map[string]any{
 			"Query": &ObjectResolver{
 				Fields: FieldResolveMap{
 					"foos": &FieldResolve{
-						Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						Resolve: func(p graphql.ResolveParams) (any, error) {
 							return foos, nil
 						},
 					},

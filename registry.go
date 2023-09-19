@@ -33,7 +33,7 @@ type registry struct {
 // newRegistry creates a new registry
 func newRegistry(
 	ctx context.Context,
-	resolvers map[string]interface{},
+	resolvers map[string]any,
 	directiveMap SchemaDirectiveVisitorMap,
 	extensions []graphql.Extension,
 	document *ast.Document,
@@ -148,7 +148,7 @@ func (c *registry) getExtensions(name, kind string) []*ast.ObjectDefinition {
 }
 
 // imports a resolver from an interface
-func (c *registry) importResolver(name string, resolver interface{}) error {
+func (c *registry) importResolver(name string, resolver any) error {
 	switch res := resolver.(type) {
 	case *graphql.Directive:
 		// allow @ to be prefixed to a directive in the event there is a type with the same

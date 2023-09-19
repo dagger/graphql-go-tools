@@ -41,7 +41,7 @@ type VisitSchemaParams struct {
 	Context context.Context
 	Config  *graphql.SchemaConfig
 	Node    *ast.SchemaDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitScalarParams params
@@ -49,7 +49,7 @@ type VisitScalarParams struct {
 	Context context.Context
 	Config  *graphql.ScalarConfig
 	Node    *ast.ScalarDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitObjectParams params
@@ -58,7 +58,7 @@ type VisitObjectParams struct {
 	Config     *graphql.ObjectConfig
 	Node       *ast.ObjectDefinition
 	Extensions []*ast.ObjectDefinition
-	Args       map[string]interface{}
+	Args       map[string]any
 }
 
 // VisitFieldDefinitionParams params
@@ -66,7 +66,7 @@ type VisitFieldDefinitionParams struct {
 	Context    context.Context
 	Config     *graphql.Field
 	Node       *ast.FieldDefinition
-	Args       map[string]interface{}
+	Args       map[string]any
 	ParentName string
 	ParentKind string
 }
@@ -76,7 +76,7 @@ type VisitArgumentDefinitionParams struct {
 	Context context.Context
 	Config  *graphql.ArgumentConfig
 	Node    *ast.InputValueDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitInterfaceParams params
@@ -84,7 +84,7 @@ type VisitInterfaceParams struct {
 	Context context.Context
 	Config  *graphql.InterfaceConfig
 	Node    *ast.InterfaceDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitUnionParams params
@@ -92,7 +92,7 @@ type VisitUnionParams struct {
 	Context context.Context
 	Config  *graphql.UnionConfig
 	Node    *ast.UnionDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitEnumParams params
@@ -100,7 +100,7 @@ type VisitEnumParams struct {
 	Context context.Context
 	Config  *graphql.EnumConfig
 	Node    *ast.EnumDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitEnumValueParams params
@@ -108,7 +108,7 @@ type VisitEnumValueParams struct {
 	Context context.Context
 	Config  *graphql.EnumValueConfig
 	Node    *ast.EnumValueDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitInputObjectParams params
@@ -116,7 +116,7 @@ type VisitInputObjectParams struct {
 	Context context.Context
 	Config  *graphql.InputObjectConfig
 	Node    *ast.InputObjectDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // VisitInputFieldDefinitionParams params
@@ -124,7 +124,7 @@ type VisitInputFieldDefinitionParams struct {
 	Context context.Context
 	Config  *graphql.InputObjectFieldConfig
 	Node    *ast.InputValueDefinition
-	Args    map[string]interface{}
+	Args    map[string]any
 }
 
 // SchemaDirectiveVisitorMap a map of schema directive visitors
@@ -170,9 +170,9 @@ func (c *registry) buildDirectiveFromAST(definition *ast.DirectiveDefinition) er
 }
 
 type applyDirectiveParams struct {
-	config     interface{}
+	config     any
 	directives []*ast.Directive
-	node       interface{}
+	node       any
 	extensions []*ast.ObjectDefinition
 	parentName string
 	parentKind string
@@ -196,7 +196,7 @@ func (c *registry) applyDirectives(p applyDirectiveParams) error {
 			return err
 		}
 
-		args, err := GetArgumentValues(directive.Args, def.Arguments, map[string]interface{}{})
+		args, err := GetArgumentValues(directive.Args, def.Arguments, map[string]any{})
 		if err != nil {
 			return err
 		}

@@ -7,14 +7,14 @@ import (
 	"github.com/dagger/graphql/language/kinds"
 )
 
-type DependencyMap map[string]map[string]interface{}
+type DependencyMap map[string]map[string]any
 
 func (r *registry) IdentifyDependencies() (DependencyMap, error) {
 	m := DependencyMap{}
 
 	// get list of initial types, all dependencies should be resolved
 	for _, t := range r.types {
-		m[t.Name()] = map[string]interface{}{}
+		m[t.Name()] = map[string]any{}
 	}
 
 	for _, def := range r.unresolvedDefs {
@@ -25,10 +25,10 @@ func (r *registry) IdentifyDependencies() (DependencyMap, error) {
 			}
 		case kinds.ScalarDefinition:
 			scalar := def.(*ast.ScalarDefinition)
-			m[scalar.Name.Value] = map[string]interface{}{}
+			m[scalar.Name.Value] = map[string]any{}
 		case kinds.EnumDefinition:
 			enum := def.(*ast.EnumDefinition)
-			m[enum.Name.Value] = map[string]interface{}{}
+			m[enum.Name.Value] = map[string]any{}
 		case kinds.InputObjectDefinition:
 			if err := identifyInputDependencies(m, def.(*ast.InputObjectDefinition)); err != nil {
 				return nil, err
@@ -51,7 +51,7 @@ func (r *registry) IdentifyDependencies() (DependencyMap, error) {
 	}
 
 	// attempt to resolve
-	resolved := map[string]interface{}{}
+	resolved := map[string]any{}
 	maxIteration := len(m) + 1
 	count := 0
 
@@ -90,7 +90,7 @@ func identifyUnionDependencies(m DependencyMap, def *ast.UnionDefinition) error 
 	name := def.Name.Value
 	deps, ok := m[name]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, t := range def.Types {
@@ -112,7 +112,7 @@ func identifyInterfaceDependencies(m DependencyMap, def *ast.InterfaceDefinition
 	name := def.Name.Value
 	deps, ok := m[name]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, field := range def.Fields {
@@ -144,7 +144,7 @@ func identifyInterfaceDependencies(m DependencyMap, def *ast.InterfaceDefinition
 func identifySchemaDependencies(m DependencyMap, def *ast.SchemaDefinition) {
 	deps, ok := m["schema"]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, op := range def.OperationTypes {
@@ -188,7 +188,7 @@ func identifyDirectiveDependencies(m DependencyMap, def *ast.DirectiveDefinition
 	name := "@" + def.Name.Value
 	deps, ok := m[name]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, arg := range def.Arguments {
@@ -210,7 +210,7 @@ func identifyInputDependencies(m DependencyMap, def *ast.InputObjectDefinition) 
 	name := def.Name.Value
 	deps, ok := m[name]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, field := range def.Fields {
@@ -233,7 +233,7 @@ func identifyObjectDependencies(m DependencyMap, def *ast.ObjectDefinition) erro
 	name := def.Name.Value
 	deps, ok := m[name]
 	if !ok {
-		deps = map[string]interface{}{}
+		deps = map[string]any{}
 	}
 
 	for _, field := range def.Fields {

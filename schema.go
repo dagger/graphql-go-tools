@@ -31,8 +31,8 @@ func MakeExecutableSchemaWithContext(ctx context.Context, config ExecutableSchem
 // https://www.apollographql.com/docs/graphql-tools/generate-schema
 type ExecutableSchema struct {
 	document         *ast.Document
-	TypeDefs         interface{}               // a string, []string, or func() []string
-	Resolvers        map[string]interface{}    // a map of Resolver, Directive, Scalar, Enum, Object, InputObject, Union, or Interface
+	TypeDefs         any                       // a string, []string, or func() []string
+	Resolvers        map[string]any            // a map of Resolver, Directive, Scalar, Enum, Object, InputObject, Union, or Interface
 	SchemaDirectives SchemaDirectiveVisitorMap // Map of SchemaDirectiveVisitor
 	Extensions       []graphql.Extension       // GraphQL extensions
 	Debug            bool                      // Prints debug messages during compile

@@ -26,7 +26,7 @@ func (s *Server) newGraphQLWSConnection(ctx context.Context, r *http.Request, ws
 			) []error {
 				s.log.Debugf("start operations %s on connection %s", opID, conn.ID())
 
-				rootObject := map[string]interface{}{}
+				rootObject := map[string]any{}
 				if s.options.RootValueFunc != nil {
 					rootObject = s.options.RootValueFunc(ctx, r)
 				}

@@ -20,7 +20,7 @@ const (
 )
 
 // ConnKey the connection key
-var ConnKey interface{} = "conn"
+var ConnKey any = "conn"
 
 type Server struct {
 	schema   graphql.Schema
@@ -49,7 +49,7 @@ func New(schema graphql.Schema, options *Options) *Server {
 	}
 }
 
-type RootValueFunc func(ctx context.Context, r *http.Request) map[string]interface{}
+type RootValueFunc func(ctx context.Context, r *http.Request) map[string]any
 
 type FormatErrorFunc func(err error) gqlerrors.FormattedError
 

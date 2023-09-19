@@ -7,7 +7,7 @@ import (
 	"github.com/dagger/graphql/language/ast"
 )
 
-func ensureArray(value interface{}) interface{} {
+func ensureArray(value any) any {
 	switch kind := reflect.TypeOf(value).Kind(); kind {
 	case reflect.Slice, reflect.Array:
 		return value
@@ -15,11 +15,11 @@ func ensureArray(value interface{}) interface{} {
 		if reflect.ValueOf(value).IsNil() {
 			return nil
 		}
-		return []interface{}{value}
+		return []any{value}
 	}
 }
 
-func serializeStringSetFn(value interface{}) interface{} {
+func serializeStringSetFn(value any) any {
 	switch kind := reflect.TypeOf(value).Kind(); kind {
 	case reflect.Slice, reflect.Array:
 		v := reflect.ValueOf(value)
@@ -28,7 +28,7 @@ func serializeStringSetFn(value interface{}) interface{} {
 		}
 		return value
 	default:
-		return []interface{}{}
+		return []any{}
 	}
 }
 
@@ -39,10 +39,10 @@ var ScalarStringSet = graphql.NewScalar(
 		Name:        "StringSet",
 		Description: "StringSet allows either a string or list of strings",
 		Serialize:   serializeStringSetFn,
-		ParseValue: func(value interface{}) interface{} {
+		ParseValue: func(value any) any {
 			return ensureArray(value)
 		},
-		ParseLiteral: func(astValue ast.Value) interface{} {
+		ParseLiteral: func(astValue ast.Value) any {
 			return ensureArray(parseLiteralJSONFn(astValue))
 		},
 	},

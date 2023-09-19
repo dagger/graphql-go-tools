@@ -44,22 +44,22 @@ type InitMessagePayload struct {
 // StartMessagePayload defines the parameters of an operation that
 // a client requests to be started.
 type StartMessagePayload struct {
-	Query         string                 `json:"query"`
-	Variables     map[string]interface{} `json:"variables"`
-	OperationName string                 `json:"operationName"`
+	Query         string         `json:"query"`
+	Variables     map[string]any `json:"variables"`
+	OperationName string         `json:"operationName"`
 }
 
 // DataMessagePayload defines the result data of an operation.
 type DataMessagePayload struct {
-	Data   interface{} `json:"data"`
-	Errors []error     `json:"errors"`
+	Data   any     `json:"data"`
+	Errors []error `json:"errors"`
 }
 
 // OperationMessage represents a GraphQL WebSocket message.
 type OperationMessage struct {
-	ID      string      `json:"id"`
-	Type    string      `json:"type"`
-	Payload interface{} `json:"payload"`
+	ID      string `json:"id"`
+	Type    string `json:"type"`
+	Payload any    `json:"payload"`
 }
 
 func (msg OperationMessage) String() string {
@@ -72,7 +72,7 @@ func (msg OperationMessage) String() string {
 
 // AuthenticateFunc is a function that resolves an auth token
 // into a user (or returns an error if that isn't possible).
-type AuthenticateFunc func(data map[string]interface{}, conn Connection) (context.Context, error)
+type AuthenticateFunc func(data map[string]any, conn Connection) (context.Context, error)
 
 // ConnectionEventHandlers define the event handlers for a connection.
 // Event handlers allow other system components to react to events such
@@ -283,7 +283,7 @@ func (conn *connection) readLoop() {
 
 		switch msg.Type {
 		case gqlConnectionAuth:
-			data := map[string]interface{}{}
+			data := map[string]any{}
 			if err := json.Unmarshal(rawPayload, &data); err != nil {
 				conn.logger.Errorf("Invalid %s data: %v", msg.Type, err)
 				conn.SendError(errors.New("invalid GQL_CONNECTION_AUTH payload"))
@@ -302,7 +302,7 @@ func (conn *connection) readLoop() {
 
 		// When the GraphQL WS connection is initiated, send an ACK back
 		case gqlConnectionInit:
-			data := map[string]interface{}{}
+			data := map[string]any{}
 			if err := json.Unmarshal(rawPayload, &data); err != nil {
 				conn.logger.Errorf("Invalid %s data: %v", msg.Type, err)
 				conn.SendError(errors.New("invalid GQL_CONNECTION_INIT payload"))

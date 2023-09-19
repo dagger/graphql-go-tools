@@ -15,9 +15,9 @@ import (
 
 // RequestOptions options
 type RequestOptions struct {
-	Query         string                 `json:"query" url:"query" schema:"query"`
-	Variables     map[string]interface{} `json:"variables" url:"variables" schema:"variables"`
-	OperationName string                 `json:"operationName" url:"operationName" schema:"operationName"`
+	Query         string         `json:"query" url:"query" schema:"query"`
+	Variables     map[string]any `json:"variables" url:"variables" schema:"variables"`
+	OperationName string         `json:"operationName" url:"operationName" schema:"operationName"`
 }
 
 // a workaround for getting`variables` as a JSON string
@@ -31,7 +31,7 @@ func getFromForm(values url.Values) *RequestOptions {
 	query := values.Get("query")
 	if query != "" {
 		// get variables map
-		variables := make(map[string]interface{}, len(values))
+		variables := make(map[string]any, len(values))
 		variablesStr := values.Get("variables")
 		json.Unmarshal([]byte(variablesStr), &variables)
 

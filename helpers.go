@@ -78,7 +78,7 @@ func getDescription(node ast.DescribableNode) string {
 	return ""
 }
 
-func parseDefaultValue(inputType ast.Type, value interface{}) (interface{}, error) {
+func parseDefaultValue(inputType ast.Type, value any) (any, error) {
 	if value == nil {
 		return nil, nil
 	}
@@ -92,7 +92,7 @@ func parseDefaultValue(inputType ast.Type, value interface{}) (interface{}, erro
 	case *ast.List:
 		switch a := value.(type) {
 		case []ast.Value:
-			arr := []interface{}{}
+			arr := []any{}
 			for _, v := range a {
 				val, err := parseDefaultValue(t.Type, v.GetValue())
 				if err != nil {
@@ -124,7 +124,7 @@ func parseDefaultValue(inputType ast.Type, value interface{}) (interface{}, erro
 }
 
 // gets the default value or defaults to nil
-func getDefaultValue(input *ast.InputValueDefinition) (interface{}, error) {
+func getDefaultValue(input *ast.InputValueDefinition) (any, error) {
 	if input.DefaultValue == nil {
 		return nil, nil
 	}
@@ -184,12 +184,12 @@ func ReadSourceFiles(p string, recursive ...bool) (string, error) {
 }
 
 // UnaliasedPathArray gets the path array for a resolve function without aliases
-func UnaliasedPathArray(info graphql.ResolveInfo) []interface{} {
-	return unaliasedPathArray(info.Operation.GetSelectionSet(), info.Path.AsArray(), []interface{}{})
+func UnaliasedPathArray(info graphql.ResolveInfo) []any {
+	return unaliasedPathArray(info.Operation.GetSelectionSet(), info.Path.AsArray(), []any{})
 }
 
 // gets the actual field path for a selection by removing aliases
-func unaliasedPathArray(set *ast.SelectionSet, remaining []interface{}, current []interface{}) []interface{} {
+func unaliasedPathArray(set *ast.SelectionSet, remaining []any, current []any) []any {
 	if len(remaining) == 0 {
 		return current
 	}

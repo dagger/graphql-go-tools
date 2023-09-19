@@ -12,7 +12,7 @@ type Resolver interface {
 
 // ResolverMap a map of resolver configurations.
 // Accept generic interfaces and identify types at build
-type ResolverMap map[string]interface{}
+type ResolverMap map[string]any
 
 // internal resolver map
 type resolverMap map[string]Resolver
@@ -72,7 +72,7 @@ func (c *UnionResolver) getKind() string {
 
 // EnumResolver config for enum values
 type EnumResolver struct {
-	Values map[string]interface{}
+	Values map[string]any
 }
 
 // GetKind gets the kind

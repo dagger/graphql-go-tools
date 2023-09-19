@@ -35,9 +35,9 @@ type Handler struct {
 
 // RequestOptions options
 type RequestOptions struct {
-	Query         string                 `json:"query" url:"query" schema:"query"`
-	Variables     map[string]interface{} `json:"variables" url:"variables" schema:"variables"`
-	OperationName string                 `json:"operationName" url:"operationName" schema:"operationName"`
+	Query         string         `json:"query" url:"query" schema:"query"`
+	Variables     map[string]any `json:"variables" url:"variables" schema:"variables"`
+	OperationName string         `json:"operationName" url:"operationName" schema:"operationName"`
 }
 
 // a workaround for getting`variables` as a JSON string
@@ -51,7 +51,7 @@ func getFromForm(values url.Values) *RequestOptions {
 	query := values.Get("query")
 	if query != "" {
 		// get variables map
-		variables := make(map[string]interface{}, len(values))
+		variables := make(map[string]any, len(values))
 		variablesStr := values.Get("variables")
 		json.Unmarshal([]byte(variablesStr), &variables)
 
@@ -196,7 +196,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // RootObjectFn allows a user to generate a RootObject per request
-type RootObjectFn func(ctx context.Context, r *http.Request) map[string]interface{}
+type RootObjectFn func(ctx context.Context, r *http.Request) map[string]any
 
 // Config configuration
 type Config struct {

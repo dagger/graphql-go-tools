@@ -23,7 +23,7 @@ type Query {
 `
 
 	// create some data
-	foos := []map[string]interface{}{
+	foos := []map[string]any{
 		{
 			"name":        "foo",
 			"description": "a foo",
@@ -37,7 +37,7 @@ type Query {
 			"Query": &ObjectResolver{
 				Fields: FieldResolveMap{
 					"foos": &FieldResolve{
-						Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						Resolve: func(p graphql.ResolveParams) (any, error) {
 							return foos, nil
 						},
 					},
@@ -48,12 +48,12 @@ type Query {
 			"test": &SchemaDirectiveVisitor{
 				VisitFieldDefinition: func(v VisitFieldDefinitionParams) error {
 					resolveFunc := v.Config.Resolve
-					v.Config.Resolve = func(p graphql.ResolveParams) (interface{}, error) {
+					v.Config.Resolve = func(p graphql.ResolveParams) (any, error) {
 						result, err := resolveFunc(p)
 						if err != nil {
 							return result, err
 						}
-						res := result.([]map[string]interface{})
+						res := result.([]map[string]any)
 						res0 := res[0]
 						res0["description"] = v.Args["message"]
 						return res, nil
@@ -86,10 +86,10 @@ type Query {
 		return
 	}
 
-	d := r.Data.(map[string]interface{})
+	d := r.Data.(map[string]any)
 	fooResult := d["foos"]
-	foos0 := fooResult.([]interface{})[0]
-	foos0Desc := foos0.(map[string]interface{})["description"]
+	foos0 := fooResult.([]any)[0]
+	foos0Desc := foos0.(map[string]any)["description"]
 	if foos0Desc.(string) != "foobar" {
 		t.Error("failed to set field with directive")
 		return

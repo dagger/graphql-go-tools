@@ -15,7 +15,7 @@ import (
 
 // Prepares an object map of argument values given a list of argument
 // definitions and list of argument AST nodes.
-func GetArgumentValues(argDefs []*graphql.Argument, argASTs []*ast.Argument, variableVariables map[string]interface{}) (map[string]interface{}, error) {
+func GetArgumentValues(argDefs []*graphql.Argument, argASTs []*ast.Argument, variableVariables map[string]any) (map[string]any, error) {
 
 	argASTMap := map[string]*ast.Argument{}
 	for _, argAST := range argASTs {
@@ -23,7 +23,7 @@ func GetArgumentValues(argDefs []*graphql.Argument, argASTs []*ast.Argument, var
 			argASTMap[argAST.Name.Value] = argAST
 		}
 	}
-	results := map[string]interface{}{}
+	results := map[string]any{}
 	for _, argDef := range argDefs {
 
 		name := argDef.PrivateName
@@ -53,7 +53,7 @@ func GetArgumentValues(argDefs []*graphql.Argument, argASTs []*ast.Argument, var
 }
 
 // Returns true if a value is null, undefined, or NaN.
-func isNullish(src interface{}) bool {
+func isNullish(src any) bool {
 	if src == nil {
 		return true
 	}

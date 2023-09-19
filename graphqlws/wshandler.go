@@ -9,14 +9,14 @@ import (
 )
 
 // ConnKey the connection key
-var ConnKey interface{} = "conn"
+var ConnKey any = "conn"
 
 // HandlerConfig config
 type HandlerConfig struct {
 	Logger       Logger
 	Authenticate AuthenticateFunc
 	Schema       graphql.Schema
-	RootValue    map[string]interface{}
+	RootValue    map[string]any
 }
 
 // NewHandler creates a new handler
