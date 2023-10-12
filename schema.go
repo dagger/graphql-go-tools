@@ -2,8 +2,6 @@ package tools
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 
 	"github.com/dagger/graphql"
 	"github.com/dagger/graphql/language/ast"
@@ -93,10 +91,8 @@ func (c *ExecutableSchema) Make(ctx context.Context) (graphql.Schema, error) {
 	}
 
 	schema, err := graphql.NewSchema(*schemaConfig)
-	if err != nil && c.Debug {
-		j, _ := json.MarshalIndent(registry.dependencyMap, "", "  ")
-		fmt.Println("Unresolved types, thunks will be used")
-		fmt.Println(string(j))
+	if err != nil {
+		return graphql.Schema{}, err
 	}
 
 	// create a new schema
